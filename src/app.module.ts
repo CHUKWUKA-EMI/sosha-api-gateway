@@ -19,6 +19,7 @@ import { AllHttpExceptionsFilter } from 'all-http-exceptions-filter';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       playground: true,
+      introspection: true,
       debug: true,
       typePaths: ['./**/*.graphql'],
       path: '/graphql',
