@@ -22,7 +22,7 @@ const logger = new Logger('HttpExceptionFilter');
 export class AllHttpExceptionsFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.getArgByIndex(2);
-    const response = ctx.req.res as Response;
+    const response = ctx?.req?.res as Response;
     let httpStatus: HttpStatus;
     let errorMessage: string;
     let stackTrace: string;
