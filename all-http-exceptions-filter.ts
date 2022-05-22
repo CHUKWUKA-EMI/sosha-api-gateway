@@ -50,7 +50,10 @@ export class AllHttpExceptionsFilter implements ExceptionFilter {
     this.saveErrorLog(responseBody, stackTrace);
 
     //send response
-    return response.status(httpStatus).json(responseBody);
+    if (response) {
+      return response.status(httpStatus).json(responseBody);
+    }
+    
   }
 
   private saveErrorLog(error: ErrorResponseBody, trace: any) {
