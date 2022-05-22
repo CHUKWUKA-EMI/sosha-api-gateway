@@ -11,7 +11,6 @@ export const PUB_SUB = 'PUB_SUB';
     {
       provide: PUB_SUB,
       useFactory: async () => {
-        // return new PubSub();
         const redisClient = createClient({
           url: process.env.REDISCLOUD_URL,
           socket: {
@@ -19,8 +18,7 @@ export const PUB_SUB = 'PUB_SUB';
           },
         });
         const subscriber = redisClient.duplicate();
-        // await redisClient.connect();
-        // await subscriber.connect();
+
         return new RedisPubSub({
           subscriber,
           publisher: redisClient,
