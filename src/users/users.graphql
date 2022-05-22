@@ -1,0 +1,104 @@
+type User {
+  id: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  phone: String
+  createdAt: DateTime!
+  imgUrl: String
+  imagekit_fileId: String
+  birthdate: Date!
+  headline: String
+  bio: String
+  country: String
+  state: String
+  website: String
+  sex: GENDER
+  username: String!
+  user_role: USER_ROLES!
+  isLoggedIn: Boolean!
+}
+
+type Users {
+  data: [User]!
+  currentPage: Int!
+  size: Int!
+  totalPages: Int!
+  hasPrevious: Boolean!
+  hasNext: Boolean!
+}
+
+enum USER_ROLES {
+  ADMIN
+  USER
+}
+
+enum GENDER {
+  MALE
+  FEMALE
+  OTHERS
+}
+
+scalar DateTime
+scalar Date
+
+input CreateUserInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+  phone: String
+  country: String
+  state: String
+  birthdate: Date
+  username: String!
+}
+
+input UpdateUserInput {
+  id: String!
+  firstName: String
+  lastName: String
+  username: String
+  email: String
+  phone: String
+  imgUrl: String
+  imagekit_fileId: String
+  birthdate: Date
+  headline: String
+  bio: String
+  country: String
+  state: String
+  website: String
+  sex: GENDER
+}
+
+type AuthData {
+  AccessToken: String
+  ExpiresIn: Int
+  TokenType: String
+  RefreshToken: String
+  IdToken: String
+}
+
+input RetrieveUserPayload {
+  username: String
+  phone: String
+  email: String
+}
+
+type Query {
+  getAllUsers(page: Int, limit: Int): Users!
+  user(id: String!): User
+  getUserByName(username: String!, token: String): User
+  retrieveUser(payload: RetrieveUserPayload!): User
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  updateProfile(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: String!): User
+  login(email: String!, password: String!): AuthData!
+  logout(userId: String!): String!
+  requestPasswordReset(email: String!): String!
+  resetPassword(password: String!, email: String!): String!
+}

@@ -1,0 +1,70 @@
+type FriendShip {
+  id: Int!
+  userId: String!
+  friendId: String!
+  friendFirstName: String!
+  friendLastName: String!
+  friendUserName: String!
+  friendImageUrl: String
+  friendshipStatus: FriendshipStatus!
+  lastMessage: String
+  createdAt: DateTime!
+  updatedAt: DateTime
+}
+
+type FriendShips {
+  data: [FriendShip!]!
+  currentPage: Int!
+  size: Int!
+  totalPages: Int!
+  hasPrevious: Boolean!
+  hasNext: Boolean!
+}
+
+scalar DateTime
+
+type MyFriends {
+  userId: String!
+  friends: [FriendShip!]!
+}
+
+enum FriendshipStatus {
+  FOLLOWED
+  FOLLOWED_BACK
+  BLACKLISTED
+}
+
+input GetFollowersInput {
+  userId: String!
+  page: Int!
+  limit: Int!
+}
+
+input CreateFollowershipInput {
+  userId: String!
+  friendId: String!
+  friendFirstName: String!
+  friendLastName: String!
+  friendUserName: String!
+  friendImageUrl: String
+}
+
+type Query {
+  myConnections(payload: GetFollowersInput!): FriendShips!
+  connection(friendshipId: Int!): FriendShip
+  followersCount(userId: String!): Int!
+  followingCount(userId: String!): Int!
+}
+
+type Mutation {
+  follow(createFollowershipInput: CreateFollowershipInput!): FriendShip!
+  followBack(friendshipId: Int!): FriendShip!
+  updateLastMessage(friendshipId: Int!, message: String!): FriendShip!
+  blacklistFriend(friendshipId: Int!): FriendShip!
+  whitelistFriend(friendshipId: Int!): FriendShip!
+}
+
+type Subscription {
+  newFollower(friendId: String!): FriendShip!
+  lastMessage(friendshipId: Int!): FriendShip!
+}

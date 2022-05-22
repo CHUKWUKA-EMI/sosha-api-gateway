@@ -1,0 +1,57 @@
+type Reaction {
+  id: String!
+  type: ReactionType!
+  postId: String!
+  userId: String!
+  userFirstName: String!
+  userLastName: String!
+  userName: String!
+  userImageUrl: String
+  createdAt: Date!
+}
+
+type Reactions {
+  data: [Reaction!]!
+  currentPage: Int!
+  size: Int!
+  totalPages: Int!
+  hasPrevious: Boolean!
+  hasNext: Boolean!
+}
+
+enum ReactionType {
+  THUMBSUP
+  HEART
+  CLAP
+  DISLIKE
+}
+
+scalar DateTime
+
+input CreatereactionInput {
+  postId: String!
+  userId: String!
+  userFirstName: String!
+  userLastName: String!
+  userName: String!
+  userImageUrl: String
+  type: ReactionType!
+}
+
+input ReactionsPagination {
+  postId: String!
+  page: Int
+  limit: Int
+}
+
+type Query {
+  postReactions(paginationPayload: ReactionsPagination): Reactions!
+}
+
+type Mutation {
+  addReaction(createReactionInput: CreatereactionInput!): Reaction!
+}
+
+type Subscription {
+  newReaction(postId: String!): Reaction!
+}

@@ -1,0 +1,61 @@
+type Post {
+  id: String!
+  content: String
+  imgUrl: String
+  videoUrl: String
+  imagekit_fileId: String
+  userId: String!
+  userFirstName: String!
+  userLastName: String!
+  userName: String!
+  userImageUrl: String
+  numberOfLikes: Int!
+  numberOfComments: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Posts {
+  data: [Post!]!
+  currentPage: Int!
+  size: Int!
+  totalPages: Int!
+  hasPrevious: Boolean!
+  hasNext: Boolean!
+}
+
+scalar DateTime
+
+input CreatePostInput {
+  content: String
+  imgUrl: String
+  userId: String!
+  userFirstName: String!
+  userLastName: String!
+  userName: String!
+  userImageUrl: String
+  imagekit_fileId: String
+  videoUrl: String
+}
+
+input UpdatePostInput {
+  id: String!
+  userId: String!
+  content: String
+}
+
+type Query {
+  posts(page: Int, limit: Int): Posts!
+  post(id: String!): Post
+  userPosts(userId: String!, page: Int, limit: Int): Posts!
+}
+
+type Mutation {
+  createPost(createPostInput: CreatePostInput!): Post!
+  updatePost(updatePostInput: UpdatePostInput!): Post!
+  deletePost(id: String!, userId: String!): Post
+}
+
+type Subscription {
+  newPost: Post!
+}

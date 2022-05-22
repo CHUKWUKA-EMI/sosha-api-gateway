@@ -1,0 +1,60 @@
+type Reply {
+  id: String!
+  userId: String!
+  userFirstName: String!
+  userLastName: String!
+  userName: String!
+  userImageUrl: String
+  reply: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  commentId: String!
+}
+
+type Replies {
+  data: [Reply!]!
+  currentPage: Int!
+  size: Int!
+  totalPages: Int!
+  hasPrevious: Boolean!
+  hasNext: Boolean!
+}
+
+scalar DateTime
+
+input CreateReplyInput {
+  userId: String!
+  userFirstName: String!
+  userLastName: String!
+  userName: String!
+  userImageUrl: String
+  commentId: String!
+  reply: String!
+}
+
+input UpdateReplyInput {
+  id: String!
+  reply: String!
+  userId: String!
+}
+
+input GetRepliesInput {
+  commentId: String!
+  page: Int
+  limit: Int
+}
+
+type Query {
+  replies(payload: GetRepliesInput!): Replies!
+  reply(id: String!): Reply
+}
+
+type Mutation {
+  createReply(createReplyInput: CreateReplyInput!): Reply!
+  updateReply(updateReplyInput: UpdateReplyInput!): Reply!
+  removeReply(id: String!, userId: String!): Reply
+}
+
+type Subscription {
+  newReply(commentId: String!): Reply!
+}

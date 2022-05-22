@@ -1,0 +1,56 @@
+type Comment {
+  id: String!
+  userId: String!
+  userFirstName: String!
+  userLastName: String!
+  userName: String!
+  userImageUrl: String
+  comment: String!
+  createdAt: DateTime!
+  updatedAt: DateTime
+  postId: String!
+  numberOfReplies: Int
+}
+
+type Comments {
+  data: [Comment!]!
+  currentPage: Int!
+  size: Int!
+  totalPages: Int!
+  hasPrevious: Boolean!
+  hasNext: Boolean!
+}
+
+scalar DateTime
+
+input CreateCommentInput {
+  postId: String!
+  comment: String!
+  userId: String!
+  userFirstName: String!
+  userLastName: String!
+  userName: String!
+  userImageUrl: String
+}
+
+input UpdateCommentInput {
+  id: String!
+  comment: String!
+  userId: String!
+}
+
+type Query {
+  comments(postId: String!, page: Int, limit: Int): Comments!
+  comment(id: String!): Comment
+  userComments(userId: String!, page: Int, limit: Int): Comments!
+}
+
+type Mutation {
+  createComment(createCommentInput: CreateCommentInput!): Comment!
+  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
+  deleteComment(id: String!, userId: String!): Comment
+}
+
+type Subscription {
+  newComment(postId: String!): Comment
+}

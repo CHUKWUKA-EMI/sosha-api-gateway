@@ -1,0 +1,84 @@
+type Chat {
+  _id: String!
+  senderId: String!
+  senderFirstName: String!
+  senderLastName: String!
+  receiverId: String!
+  receiverFirstName: String!
+  receiverLastName: String!
+  friendshipId: Int!
+  message: String
+  imageUrl: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Chats {
+  data: [Chat!]!
+  currentPage: Int!
+  size: Int!
+  totalPages: Int!
+  hasPrevious: Boolean!
+  hasNext: Boolean!
+}
+
+scalar DateTime
+
+input CreateChatInput {
+  receiverId: String!
+  senderId: String!
+  senderFirstName: String!
+  senderLastName: String!
+  friendshipId: Int!
+  receiverFirstName: String!
+  receiverLastName: String!
+  message: String
+  imageUrl: String
+}
+
+input UpdateChatInput {
+  _id: String!
+  message: String!
+}
+
+input GetChatsInput {
+  friendshipId: Int!
+  page: Int
+  limit: Int
+}
+
+input SearchChatsInput {
+  friendshipId: Int!
+  search: String!
+  page: Int
+  limit: Int
+}
+
+type UserIsTyping {
+  friendshipId: Int!
+  receiverId: String!
+  notification: String!
+}
+
+type Query {
+  chats(payload: GetChatsInput!): Chats!
+  searchChats(payload: SearchChatsInput!): Chats!
+  chat(id: String!): Chat
+}
+
+type Mutation {
+  createChat(createChatInput: CreateChatInput!): Chat!
+  updateChat(updateChatInput: UpdateChatInput!): Chat!
+  deleteChat(id: String!): Chat!
+  userIsTyping(
+    friendshipId: Int!
+    receiverId: String!
+    senderFirstName: String!
+    senderLastName: String!
+  ): UserIsTyping!
+}
+
+type Subscription {
+  newChat(friendshipId: Int!): Chat!
+  userIsTyping(friendshipId: Int!, receiverId: String!): UserIsTyping!
+}
