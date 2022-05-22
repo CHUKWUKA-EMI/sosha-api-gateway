@@ -15,9 +15,8 @@ export class AppController {
     }
   }
 
-  @UseGuards(AuthGuard)
-  @Get('testEndpoint')
-  async test() {
-    console.log('called');
+  @Get('/')
+  sayHello(@Res() res: Response) {
+    res.status(200).send('Sosha API Gateway...');
   }
 }
