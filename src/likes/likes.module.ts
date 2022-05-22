@@ -15,7 +15,7 @@ export const REACTIONS_SERVICE = 'REACTIONS_SERVICE';
         return ClientProxyFactory.create({
           transport: Transport.REDIS,
           options: {
-            url: process.env.REDIS_URL,
+            url: process.env.REDISCLOUD_URL,
           },
         });
       },

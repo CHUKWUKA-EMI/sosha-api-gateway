@@ -15,7 +15,7 @@ export const COMMENTS_SERVICE = 'COMMENTS_SERVICE';
         return ClientProxyFactory.create({
           transport: Transport.REDIS,
           options: {
-            url: process.env.REDIS_URL,
+            url: process.env.REDISCLOUD_URL,
           },
         });
       },
