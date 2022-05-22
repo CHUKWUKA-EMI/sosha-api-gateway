@@ -12,7 +12,7 @@ export const PUB_SUB = 'PUB_SUB';
       provide: PUB_SUB,
       useFactory: async () => {
         const redisClient = createClient({
-          url: process.env.REDISCLOUD_URL,
+          url: process.env.REDIS_URL,
           socket: {
             reconnectStrategy: (retries) => Math.min(retries * 50, 100),
           },

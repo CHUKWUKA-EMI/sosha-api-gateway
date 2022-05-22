@@ -14,7 +14,7 @@ export const FRIENDSHIP_SERVICE = 'FRIENDSHIP_SERVICE';
         return ClientProxyFactory.create({
           transport: Transport.REDIS,
           options: {
-            url: process.env.REDISCLOUD_URL,
+            url: process.env.REDIS_URL,
           },
         });
       },

@@ -10,7 +10,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         name: 'CHAT_SERVICE',
         transport: Transport.REDIS,
         options: {
-          url: process.env.REDISCLOUD_URL,
+          url: process.env.REDIS_URL,
         },
       },
     ]),
