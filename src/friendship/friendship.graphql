@@ -36,8 +36,8 @@ enum FriendshipStatus {
 
 input GetFollowersInput {
   userId: String!
-  page: Int!
-  limit: Int!
+  page: Int
+  limit: Int
 }
 
 input CreateFollowershipInput {

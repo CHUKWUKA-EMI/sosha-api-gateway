@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { Observable, timeout } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
   CreatereactionInput,
   Reaction,
@@ -27,12 +27,10 @@ export class LikesService {
   findPostReactions(
     paginationPayload: ReactionsPagination,
   ): Observable<Reactions> {
-    const response$ = this.reactionsServiceClient
-      .send<Reactions>(
-        { role: 'reaction', cmd: 'findPostReactions' },
-        paginationPayload,
-      )
-      .pipe(timeout(10000));
+    const response$ = this.reactionsServiceClient.send<Reactions>(
+      { role: 'reaction', cmd: 'findPostReactions' },
+      paginationPayload,
+    );
 
     return response$;
   }

@@ -97,8 +97,8 @@ export class UpdateCommentInput {
 
 export class GetFollowersInput {
     userId: string;
-    page: number;
-    limit: number;
+    page?: Nullable<number>;
+    limit?: Nullable<number>;
 }
 
 export class CreateFollowershipInput {

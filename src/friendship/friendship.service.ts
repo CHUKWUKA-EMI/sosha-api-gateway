@@ -5,7 +5,6 @@ import {
   CreateFollowershipInput,
   FriendShip,
   FriendShips,
-  FriendshipStatus,
   GetFollowersInput,
 } from 'src/graphql';
 
@@ -21,10 +20,7 @@ export class FriendService {
   ): Observable<FriendShip> {
     const response$ = this.friendshipServiceClient.send<FriendShip>(
       { role: 'friendship', cmd: 'follow' },
-      {
-        ...createFollowershipInput,
-        friendshipStatus: FriendshipStatus.FOLLOWED,
-      },
+      createFollowershipInput,
     );
 
     return response$;
@@ -33,10 +29,8 @@ export class FriendService {
   followBack(friendshipId: number): Observable<FriendShip> {
     const response$ = this.friendshipServiceClient.send<FriendShip>(
       { role: 'friendship', cmd: 'followBack' },
-      {
-        friendshipId,
-        friendshipStatus: FriendshipStatus.FOLLOWED_BACK,
-      },
+
+      friendshipId,
     );
 
     return response$;
@@ -45,7 +39,7 @@ export class FriendService {
   blacklistFriend(friendshipId: number): Observable<FriendShip> {
     const response$ = this.friendshipServiceClient.send<FriendShip>(
       { role: 'friendship', cmd: 'blacklist' },
-      { friendshipId, friendshipStatus: FriendshipStatus.BLACKLISTED },
+      friendshipId,
     );
 
     return response$;
@@ -54,7 +48,7 @@ export class FriendService {
   whitelistFriend(friendshipId: number): Observable<FriendShip> {
     const response$ = this.friendshipServiceClient.send<FriendShip>(
       { role: 'friendship', cmd: 'whitelist' },
-      { friendshipId, friendshipStatus: FriendshipStatus.FOLLOWED_BACK },
+      friendshipId,
     );
 
     return response$;
@@ -77,10 +71,7 @@ export class FriendService {
 
   findOneConnection(friendshipId: number): Observable<FriendShip> {
     const response$ = this.friendshipServiceClient
-      .send<FriendShip>(
-        { role: 'friendship', cmd: 'findOne' },
-        { friendshipId },
-      )
+      .send<FriendShip>({ role: 'friendship', cmd: 'findOne' }, friendshipId)
       .pipe(timeout(10000));
 
     return response$;
@@ -88,10 +79,7 @@ export class FriendService {
 
   getFollowersCount(userId: string): Observable<number> {
     const response$ = this.friendshipServiceClient
-      .send<number>(
-        { role: 'friendship', cmd: 'getFollowersCount' },
-        { userId },
-      )
+      .send<number>({ role: 'friendship', cmd: 'getFollowersCount' }, userId)
       .pipe(timeout(10000));
 
     return response$;
@@ -99,10 +87,7 @@ export class FriendService {
 
   getFollowingCount(userId: string): Observable<number> {
     const response$ = this.friendshipServiceClient
-      .send<number>(
-        { role: 'friendship', cmd: 'getFollowingCount' },
-        { userId },
-      )
+      .send<number>({ role: 'friendship', cmd: 'getFollowingCount' }, userId)
       .pipe(timeout(10000));
 
     return response$;

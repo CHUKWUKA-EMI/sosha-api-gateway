@@ -175,7 +175,7 @@ export class FriendResolver {
 
   @Subscription('lastMessage', {
     filter: (payload, variables) => {
-      return payload.lastMessage.friendshipId === variables.friendshipId;
+      return payload.lastMessage.id === variables.friendshipId;
     },
   })
   lastMessage(@Args('friendshipId') friendshipId: number) {
