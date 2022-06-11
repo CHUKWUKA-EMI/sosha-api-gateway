@@ -1,7 +1,8 @@
-import { Inject, Logger, Res } from '@nestjs/common';
+import { HttpCode, Inject, Logger, Res } from '@nestjs/common';
 import { Resolver, Query, Mutation, Args, Subscription } from '@nestjs/graphql';
 import { Response } from 'express';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
+import { lastValueFrom } from 'rxjs';
 import {
   Chat,
   Chats,
@@ -24,113 +25,102 @@ export class ChatsResolver {
   ) {}
 
   @Mutation('createChat')
-  create(
+  @HttpCode(201)
+  async create(
     @Args('createChatInput') createChatInput: CreateChatInput,
-    @Res() res: Response,
   ) {
-    return this.chatsService.create(createChatInput).subscribe({
-      next: (chat: Chat) => {
-        this.pubsub.publish('newChat', { newChat: chat });
-        return res.status(201).json(chat);
-      },
-      error: (err: any) => {
-        logger.error(err);
-        throw new Error(err);
-      },
-    });
+
+    try {
+      const chat = await lastValueFrom(this.chatsService.create(createChatInput))
+      this.pubsub.publish('newChat', { newChat: chat });
+      return chat
+    } catch (error) {
+      logger.error(error);
+      return new Error(error.error);
+    }
   }
 
   @Query('chats')
-  findAll(@Res() res: Response, @Args('payload') payload: GetChatsInput) {
-    return this.chatsService.getChats(payload).subscribe({
-      next: (chats: Chats) => {
-        return res.status(200).json(chats);
-      },
-      error: (err: any) => {
-        logger.error(err);
-        throw new Error(err);
-      },
-    });
+  @HttpCode(200)
+  async findAll(@Args('payload') payload: GetChatsInput) {
+    try {
+      const chats = await lastValueFrom(this.chatsService.getChats(payload))
+      return chats
+    } catch (error) {
+      logger.error(error);
+      return new Error(error.error);
+    }
   }
 
   @Query('searchChats')
-  searchChats(
-    @Res() res: Response,
+  @HttpCode(200)
+  async searchChats(
     @Args('payload') payload: SearchChatsInput,
   ) {
-    return this.chatsService.searchChats(payload).subscribe({
-      next: (chats: Chats) => {
-        return res.status(200).json(chats);
-      },
-      error: (err: any) => {
-        logger.error(err);
-        throw new Error(err);
-      },
-    });
+    try {
+      const chats = await lastValueFrom(this.chatsService.searchChats(payload))
+      return chats
+    } catch (error) {
+      logger.error(error);
+      return new Error(error.error);
+    }
   }
 
   @Query('chat')
-  findOne(@Res() res: Response, @Args('id') id: string) {
-    return this.chatsService.getChat(id).subscribe({
-      next: (chat: Chat) => {
-        return res.status(200).json(chat);
-      },
-      error: (err: any) => {
-        logger.error(err);
-        throw new Error(err);
-      },
-    });
+  @HttpCode(200)
+  async findOne(@Args('id') id: string) {
+
+    try {
+      return await lastValueFrom(this.chatsService.getChat(id))
+    } catch (error) {
+      logger.error(error);
+      return new Error(error.error);
+    }
   }
 
   @Mutation('updateChat')
-  update(
-    @Res() res: Response,
+  @HttpCode(200)
+  async update(
     @Args('updateChatInput') updateChatInput: UpdateChatInput,
   ) {
-    return this.chatsService.update(updateChatInput).subscribe({
-      next: (chat: Chat) => {
-        return res.status(200).json(chat);
-      },
-      error: (err: any) => {
-        logger.error(err);
-        throw new Error(err);
-      },
-    });
+
+    try {
+      return await lastValueFrom(this.chatsService.update(updateChatInput))
+    } catch (error) {
+      logger.error(error);
+      return new Error(error.error);
+    }
   }
 
   @Mutation('deleteChat')
-  remove(@Args('id') id: string, @Res() res: Response) {
-    return this.chatsService.remove(id).subscribe({
-      next: (chat: Chat) => {
-        return res.status(200).json(chat);
-      },
-      error: (err: any) => {
-        logger.error(err);
-        throw new Error(err);
-      },
-    });
+  @HttpCode(200)
+  async remove(@Args('id') id: string) {
+    try {
+      return await lastValueFrom(this.chatsService.remove(id))
+    } catch (error) {
+      logger.error(error);
+      return new Error(error.error);
+    }
   }
 
   @Mutation('userIsTyping')
-  isTyping(
+  @HttpCode(200)
+  async isTyping(
     @Args('friendshipId') friendshipId: number,
     @Args('receiverId') receiverId: string,
     @Args('senderFirstName') senderFirstName: string,
     @Args('senderLastName') senderLastName: string,
-    @Res() res: Response,
   ) {
-    return this.chatsService
-      .userIsTyping(friendshipId, receiverId, senderFirstName, senderLastName)
-      .subscribe({
-        next: (data: UserIsTyping) => {
+
+      try {
+        const data= await lastValueFrom(this.chatsService
+          .userIsTyping(friendshipId, receiverId, senderFirstName, senderLastName))
           this.pubsub.publish('userIsTyping', { userIsTyping: data });
-          return res.status(200).json(data);
-        },
-        error: (err: any) => {
-          logger.error(err);
-          throw new Error(err);
-        },
-      });
+        return data
+      } catch (error) {
+        logger.error(error);
+        return new Error(error.error);
+      }
   }
 
   @Subscription('newChat', {

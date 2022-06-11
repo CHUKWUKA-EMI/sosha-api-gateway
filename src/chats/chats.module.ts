@@ -1,20 +1,21 @@
 import { Module } from '@nestjs/common';
 import { ChatsService } from './chats.service';
 import { ChatsResolver } from './chats.resolver';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ClientProxyFactory, ClientsModule, Transport } from '@nestjs/microservices';
 
+export const CHAT_SERVICE = 'CHAT_SERVICE'
 @Module({
-  imports: [
-    ClientsModule.register([
-      {
-        name: 'CHAT_SERVICE',
+  providers: [ChatsResolver, ChatsService,{
+    provide: CHAT_SERVICE,
+    useFactory: () => {
+      return ClientProxyFactory.create({
         transport: Transport.REDIS,
         options: {
           url: process.env.REDIS_URL,
         },
-      },
-    ]),
-  ],
-  providers: [ChatsResolver, ChatsService],
+      });
+    },
+  },],
+  exports:[CHAT_SERVICE]
 })
 export class ChatsModule {}
