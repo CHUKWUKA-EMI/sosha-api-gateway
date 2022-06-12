@@ -41,6 +41,7 @@ enum GENDER {
 
 scalar DateTime
 scalar Date
+scalar Object
 
 input CreateUserInput {
   firstName: String!
@@ -86,6 +87,12 @@ input RetrieveUserPayload {
   email: String
 }
 
+input PasswordChange {
+  accessToken: String!
+  previousPassword: String!
+  proposedPassword: String!
+}
+
 type Query {
   getAllUsers(page: Int, limit: Int): Users!
   user(id: String!): User
@@ -100,5 +107,6 @@ type Mutation {
   login(email: String!, password: String!): AuthData!
   logout(userId: String!): String!
   requestPasswordReset(email: String!): String!
-  resetPassword(password: String!, email: String!): String!
+  resetPassword(email: String!): String!
+  changePassword(payload: PasswordChange!): Object
 }

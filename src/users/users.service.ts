@@ -5,6 +5,7 @@ import {
   AuthData,
   CreateUserInput,
   RetrieveUserPayload,
+  PasswordChange,
   UpdateUserInput,
   User,
   Users,
@@ -48,13 +49,19 @@ export class UsersService {
     return res$;
   }
 
-  resetPassword(password: string, email: string): Observable<string> {
-    const res$ = this.usersServiceClient
-      .send<string>(
-        { role: 'users', cmd: 'resetPassword' },
-        { password, email },
-      )
-      .pipe(timeout(5000));
+  resetPassword(email: string): Observable<string> {
+    const res$ = this.usersServiceClient.send<string>(
+      { role: 'users', cmd: 'resetPassword' },
+      { email },
+    );
+    return res$;
+  }
+
+  changePassword(payload: PasswordChange): Observable<any> {
+    const res$ = this.usersServiceClient.send<any>(
+      { role: 'users', cmd: 'changePassword' },
+      payload,
+    );
     return res$;
   }
 

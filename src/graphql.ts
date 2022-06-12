@@ -184,6 +184,12 @@ export class RetrieveUserPayload {
     email?: Nullable<string>;
 }
 
+export class PasswordChange {
+    accessToken: string;
+    previousPassword: string;
+    proposedPassword: string;
+}
+
 export class Post {
     id: string;
     content?: Nullable<string>;
@@ -303,7 +309,9 @@ export abstract class IMutation {
 
     abstract requestPasswordReset(email: string): string | Promise<string>;
 
-    abstract resetPassword(password: string, email: string): string | Promise<string>;
+    abstract resetPassword(email: string): string | Promise<string>;
+
+    abstract changePassword(payload: PasswordChange): Nullable<Object> | Promise<Nullable<Object>>;
 }
 
 export abstract class ISubscription {
@@ -487,4 +495,5 @@ export class AuthData {
 }
 
 export type DateTime = any;
+export type Object = any;
 type Nullable<T> = T | null;

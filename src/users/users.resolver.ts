@@ -4,6 +4,7 @@ import { AllRPCExceptionsFilter } from 'all-rpc-exceptions-filter';
 import { lastValueFrom } from 'rxjs';
 import {
   CreateUserInput,
+  PasswordChange,
   RetrieveUserPayload,
   UpdateUserInput,
   User,
@@ -148,14 +149,21 @@ export class UsersResolver {
   @UseFilters(new AllRPCExceptionsFilter())
   @Mutation('resetPassword')
   @HttpCode(200)
-  async resetPassword(
-    @Args('password') password: string,
-    @Args('email') email: string,
-  ) {
+  async resetPassword(@Args('email') email: string) {
     try {
-      return await lastValueFrom(
-        this.usersService.resetPassword(password, email),
-      );
+      return await lastValueFrom(this.usersService.resetPassword(email));
+    } catch (error) {
+      logger.error(error);
+      throw new Error(error.error);
+    }
+  }
+
+  @UseFilters(new AllRPCExceptionsFilter())
+  @Mutation('resetPassword')
+  @HttpCode(200)
+  async changePassword(@Args('payload') payload: PasswordChange) {
+    try {
+      return await lastValueFrom(this.usersService.changePassword(payload));
     } catch (error) {
       logger.error(error);
       throw new Error(error.error);
