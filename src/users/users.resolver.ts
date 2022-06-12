@@ -125,9 +125,14 @@ export class UsersResolver {
   @UseFilters(new AllRPCExceptionsFilter())
   @HttpCode(200)
   @Mutation('logout')
-  async logout(@Args('userId') userId: string) {
+  async logout(
+    @Args('userId') userId: string,
+    @Args('refreshToken') refreshToken: string,
+  ) {
     try {
-      return await lastValueFrom(this.usersService.logout(userId));
+      return await lastValueFrom(
+        this.usersService.logout(userId, refreshToken),
+      );
     } catch (error) {
       logger.error(error);
       throw new Error(error.error);

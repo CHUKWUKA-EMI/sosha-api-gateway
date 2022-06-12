@@ -305,7 +305,7 @@ export abstract class IMutation {
 
     abstract login(email: string, password: string): AuthData | Promise<AuthData>;
 
-    abstract logout(userId: string): string | Promise<string>;
+    abstract logout(userId: string, refreshToken: string): string | Promise<string>;
 
     abstract requestPasswordReset(email: string): string | Promise<string>;
 

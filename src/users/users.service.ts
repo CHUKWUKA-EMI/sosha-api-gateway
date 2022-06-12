@@ -34,18 +34,21 @@ export class UsersService {
     return response$;
   }
 
-  logout(userId: string): Observable<string> {
-    const response$ = this.usersServiceClient
-      .send<string>({ role: 'users', cmd: 'logout' }, userId)
-      .pipe(timeout(5000));
+  logout(userId: string, refreshToken: string): Observable<string> {
+    const response$ = this.usersServiceClient.send<string>(
+      { role: 'users', cmd: 'logout' },
+      { userId, refreshToken },
+    );
 
     return response$;
   }
 
   requestPasswordReset(email: string): Observable<string> {
-    const res$ = this.usersServiceClient
-      .send<string>({ role: 'users', cmd: 'requestPasswordReset' }, email)
-      .pipe(timeout(5000));
+    const res$ = this.usersServiceClient.send<string>(
+      { role: 'users', cmd: 'requestPasswordReset' },
+      email,
+    );
+
     return res$;
   }
 
@@ -66,51 +69,55 @@ export class UsersService {
   }
 
   findAll(page: number, limit: number): Observable<Users> {
-    const users$ = this.usersServiceClient
-      .send<Users>({ role: 'users', cmd: 'getAllUsers' }, { page, limit })
-      .pipe(timeout(5000));
+    const users$ = this.usersServiceClient.send<Users>(
+      { role: 'users', cmd: 'getAllUsers' },
+      { page, limit },
+    );
+
     return users$;
   }
 
   findOne(id: string): Observable<User> {
-    const user$ = this.usersServiceClient
-      .send<User>({ role: 'users', cmd: 'findOne' }, id)
-      .pipe(timeout(5000));
+    const user$ = this.usersServiceClient.send<User>(
+      { role: 'users', cmd: 'findOne' },
+      id,
+    );
 
     return user$;
   }
 
   findByUserName(username: string, token?: string): Observable<User> {
-    const user$ = this.usersServiceClient
-      .send<User>(
-        { role: 'users', cmd: 'getUserByUserName' },
-        { username, token },
-      )
-      .pipe(timeout(5000));
+    const user$ = this.usersServiceClient.send<User>(
+      { role: 'users', cmd: 'getUserByUserName' },
+      { username, token },
+    );
 
     return user$;
   }
 
   retrieveUser(payload: RetrieveUserPayload): Observable<User> {
-    const user$ = this.usersServiceClient
-      .send<User>({ role: 'users', cmd: 'retrieveUser' }, payload)
-      .pipe(timeout(5000));
+    const user$ = this.usersServiceClient.send<User>(
+      { role: 'users', cmd: 'retrieveUser' },
+      payload,
+    );
 
     return user$;
   }
 
   update(updateUserInput: UpdateUserInput): Observable<User> {
-    const user$ = this.usersServiceClient
-      .send<User>({ role: 'users', cmd: 'updateProfile' }, updateUserInput)
-      .pipe(timeout(5000));
+    const user$ = this.usersServiceClient.send<User>(
+      { role: 'users', cmd: 'updateProfile' },
+      updateUserInput,
+    );
 
     return user$;
   }
 
   remove(id: string): Observable<User> {
-    const user$ = this.usersServiceClient
-      .send<User>({ role: 'users', cmd: 'removeUser' }, id)
-      .pipe(timeout(5000));
+    const user$ = this.usersServiceClient.send<User>(
+      { role: 'users', cmd: 'removeUser' },
+      id,
+    );
 
     return user$;
   }

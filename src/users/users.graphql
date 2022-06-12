@@ -105,7 +105,7 @@ type Mutation {
   updateProfile(updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): User
   login(email: String!, password: String!): AuthData!
-  logout(userId: String!): String!
+  logout(userId: String!, refreshToken: String!): String!
   requestPasswordReset(email: String!): String!
   resetPassword(email: String!): String!
   changePassword(payload: PasswordChange!): Object
